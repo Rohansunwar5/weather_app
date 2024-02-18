@@ -9,6 +9,10 @@ import Container from "@/components/Container";
 import { convertKelvinToCelsius } from "@/utils/convertKelvinToCelsius";
 import WeatherIcon from "@/components/WeatherIcon";
 import { getDayOrNightIcon } from "@/utils/getDayOrNightIcon";
+import WeatherDetails from "@/components/WeatherDetails";
+import { metersToKilometers } from "@/utils/metersToKilometers";
+import { convertWindSpeed } from "@/utils/convertWindSpeed";
+import ForecastWeatherDetail from "@/components/ForecastWeatherDetail";
 
 interface WeatherDetail {
   dt: number;
@@ -78,6 +82,14 @@ export default function Home() {
   const firstData = data?.list[0];
 
   console.log("data", data);
+
+  const uniqueDates = [
+    ...new Set(
+      data?.list.map(
+        (entry) => new Date(entry.dt * 1000).toISOString().split("T")[0]
+      )
+    )
+  ]
   
   if(isLoading)  return (
     <div className="flex items-center min-h-screen justify-center">
@@ -147,11 +159,46 @@ export default function Home() {
           </div>
         </Container>
       </div>
-        
+        <div className="flex gap-4">
+
+            <Container className="w-fit  justify-center flex-col px-4 items-center ">
+            <p className=" capitalize text-center">
+              {firstData?.weather[0].description}{" "}
+            </p>
+            <WeatherIcon
+                iconName={getDayOrNightIcon(
+                  firstData?.weather[0].icon ?? "",
+                  firstData?.dt_txt ?? ""
+                )}
+              />
+            </Container>
+            <Container className="bg-yellow-300/80  px-6 gap-4 justify-between overflow-x-auto">
+              <WeatherDetails
+                visability={metersToKilometers(
+                  firstData?.visibility ?? 10000
+                )}
+                airPressure={`${firstData?.main.pressure} hPa`}
+                humidity={`${firstData?.main.humidity}%`}
+                sunrise={format(
+                  fromUnixTime(data?.city.sunrise ?? 1702949452),
+                  "H:mm"
+                )}
+                sunset={format(
+                  fromUnixTime(data?.city.sunset ?? 1702517657),
+                  "H:mm"
+                )}
+                windSpeed={convertWindSpeed(firstData?.wind.speed ?? 1.64)}
+              />
+            </Container>
+
+        </div>
       </section>
 
       {/* 5 days forecast data */}
-      <section></section>
+      <section className="flex w-full flex-col gap-4  ">
+        <p className="text-2xl">ForeCast (5 Days)</p>
+          <ForecastWeatherDetail />
+      </section>
      </main>
    </div>
   );
