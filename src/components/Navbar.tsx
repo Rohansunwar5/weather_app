@@ -23,7 +23,7 @@ export default function Navbar({ location }: Props) {
   const [place, setPlace] = useAtom(placeAtom);
   const [_, setLoadingCity] = useAtom(loadingCityAtom);
 
-  async function handleInputChange(value: string) {
+  async function handleInputChang(value: string) {
     setCity(value);
     if (value.length >= 3) {
       try {
@@ -50,7 +50,7 @@ export default function Navbar({ location }: Props) {
     setShowSuggestions(false);
   }
 
-  function handleSubmitSearch(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmiSearch(e: React.FormEvent<HTMLFormElement>) {
     setLoadingCity(true);
     e.preventDefault();
     if (suggestions.length == 0) {
@@ -107,8 +107,8 @@ export default function Navbar({ location }: Props) {
 
               <SearchBox
                 value={city}
-                onSubmit={handleSubmitSearch}
-                onChange={(e) => handleInputChange(e.target.value)}
+                onSubmit={handleSubmiSearch}
+                onChange={(e) => handleInputChang(e.target.value)}
               />
               <SuggetionBox
                 {...{
@@ -128,8 +128,8 @@ export default function Navbar({ location }: Props) {
 
           <SearchBox
             value={city}
-            onSubmit={handleSubmitSearch}
-            onChange={(e) => handleInputChange(e.target.value)}
+            onSubmit={handleSubmiSearch}
+            onChange={(e) => handleInputChang(e.target.value)}
           />
           <SuggetionBox
             {...{

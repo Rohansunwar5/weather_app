@@ -56,4 +56,4 @@ export default function ForecastWeatherDetail(
       </section>
     </Container>
   );
-} 
+}
